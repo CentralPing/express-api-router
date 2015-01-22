@@ -1,8 +1,8 @@
 {
   "name": "express-api-router",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Allows easy creation of typical and custom RESTful API endpoints for expressJS.",
-  "main": "tags.js",
+  "main": "api-router.js",
   "dependencies": {
     "express": "^4.11.0",
     "lodash-node": "^2.4.1"
