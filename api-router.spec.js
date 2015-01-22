@@ -261,6 +261,63 @@ describe('ExpressJS API router config', function () {
       }, done);
     });
 
+    describe('with multiple configs', function () {
+      it('should process the routes in order', function (done) {
+        var router = apiFilter(
+          {
+            path: '/:route?',
+            routes: {
+              get: {
+                action: function (req, res, next) {
+                  expect(req.hit++).toEqual(0);
+
+                  if (req.params.route) {
+                    expect(req.url).toEqual(requests[1].url);
+                  }
+                  else {
+                    expect(req.url).toEqual(requests[0].url);
+                  }
+
+                  next();
+                }
+              }
+            }
+          },
+          {
+            path: '/foo',
+            routes: {
+              get: {
+                action: function (req, res, next) {
+                  expect(req.hit++).toEqual(1);
+                  expect(req.url).toEqual(requests[1].url);
+
+                  next();
+                }
+              }
+            }
+          }
+        );
+
+        async.each(requests, function (request, cb) {
+          router.handle(request, {}, function (err) {
+            expect(err).toBeUndefined();
+
+            if (request.url === requests[0].url && request.method === requests[0].method) {
+              expect(request.hit).toEqual(1);
+            }
+            else if (request.url === requests[1].url && request.method === requests[1].method) {
+              expect(request.hit).toEqual(2);
+            }
+            else {
+              expect(request.hit).toEqual(0);
+            }
+
+            cb();
+          });
+        }, done);
+      });
+    });
+
     describe('with middleware', function () {
       it('should apply middleware to all routes/methods', function (done) {
         var router = apiFilter({
