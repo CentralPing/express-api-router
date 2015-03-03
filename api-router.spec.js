@@ -1,4 +1,4 @@
-var apiFilter = require('./api-router');
+var apiRouter = require('./api-router');
 var async = require('async');
 
 // TODO: add tests for custom routes
@@ -7,12 +7,12 @@ var async = require('async');
 
 describe('ExpressJS API router config', function () {
   it('should export a function on require', function () {
-    expect(apiFilter).toEqual(jasmine.any(Function));
-    expect(apiFilter.name).toBe('apiRouterInit');
+    expect(apiRouter).toEqual(jasmine.any(Function));
+    expect(apiRouter.name).toBe('apiRouterInit');
   });
 
   it('should return an expressJS router after executing exported function', function () {
-    var router = apiFilter();
+    var router = apiRouter();
     expect(router).toEqual(jasmine.any(Function));
     expect(router.name).toBe('router');
   });
@@ -33,7 +33,7 @@ describe('ExpressJS API router config', function () {
     });
 
     it('should not route any requests', function (done) {
-      var router = apiFilter();
+      var router = apiRouter();
 
       async.each(requests, function (request, cb) {
         router.handle(request, {}, function (err) {
@@ -46,7 +46,7 @@ describe('ExpressJS API router config', function () {
     });
 
     it('should only route GET `/`', function (done) {
-      var router = apiFilter({
+      var router = apiRouter({
         routes: {
           read: {
             action: function (req, res, next) {
@@ -76,7 +76,7 @@ describe('ExpressJS API router config', function () {
     });
 
     it('should only route GET `/foo`', function (done) {
-      var router = apiFilter({
+      var router = apiRouter({
         path: '/foo',
         routes: {
           read: {
@@ -107,7 +107,7 @@ describe('ExpressJS API router config', function () {
     });
 
     it('should only route POST `/foo`', function (done) {
-      var router = apiFilter({
+      var router = apiRouter({
         path: '/foo/:id?',
         routes: {
           create: {
@@ -138,7 +138,7 @@ describe('ExpressJS API router config', function () {
     });
 
     it('should only route GET `/foo/12345`', function (done) {
-      var router = apiFilter({
+      var router = apiRouter({
         path: '/foo/:id',
         routes: {
           read: {
@@ -169,7 +169,7 @@ describe('ExpressJS API router config', function () {
     });
 
     it('should only route PUT `/foo/12345`', function (done) {
-      var router = apiFilter({
+      var router = apiRouter({
         path: '/foo/:id?',
         routes: {
           replace: {
@@ -200,7 +200,7 @@ describe('ExpressJS API router config', function () {
     });
 
     it('should only route PATCH `/foo/12345`', function (done) {
-      var router = apiFilter({
+      var router = apiRouter({
         path: '/foo/:id?',
         routes: {
           patch: {
@@ -231,7 +231,7 @@ describe('ExpressJS API router config', function () {
     });
 
     it('should only route DELETE `/foo/12345`', function (done) {
-      var router = apiFilter({
+      var router = apiRouter({
         path: '/foo/:id?',
         routes: {
           destroy: {
@@ -263,7 +263,7 @@ describe('ExpressJS API router config', function () {
 
     describe('with multiple configs', function () {
       it('should process the routes in order', function (done) {
-        var router = apiFilter(
+        var router = apiRouter(
           {
             path: '/:route?',
             routes: {
@@ -320,7 +320,7 @@ describe('ExpressJS API router config', function () {
 
     describe('with middleware', function () {
       it('should apply middleware to all routes/methods', function (done) {
-        var router = apiFilter({
+        var router = apiRouter({
           middleware: [
             function (req, res, next) {
               expect(req.hit++).toEqual(0);
@@ -395,7 +395,7 @@ describe('ExpressJS API router config', function () {
       });
 
       it('should only apply to route GET `/`', function (done) {
-        var router = apiFilter({
+        var router = apiRouter({
           routes: {
             read: {
               middleware: [
@@ -431,7 +431,7 @@ describe('ExpressJS API router config', function () {
       });
 
       it('should only apply to route GET `/foo`', function (done) {
-        var router = apiFilter({
+        var router = apiRouter({
           path: '/foo',
           routes: {
             read: {
@@ -468,7 +468,7 @@ describe('ExpressJS API router config', function () {
       });
 
       it('should only apply to route POST `/foo`', function (done) {
-        var router = apiFilter({
+        var router = apiRouter({
           path: '/foo/:id?',
           routes: {
             create: {
@@ -505,7 +505,7 @@ describe('ExpressJS API router config', function () {
       });
 
       it('should only apply to route GET `/foo/12345`', function (done) {
-        var router = apiFilter({
+        var router = apiRouter({
           path: '/foo/:id',
           routes: {
             read: {
@@ -542,7 +542,7 @@ describe('ExpressJS API router config', function () {
       });
 
       it('should only apply to route PUT `/foo/12345`', function (done) {
-        var router = apiFilter({
+        var router = apiRouter({
           path: '/foo/:id?',
           routes: {
             replace: {
@@ -579,7 +579,7 @@ describe('ExpressJS API router config', function () {
       });
 
       it('should only apply to route PATCH `/foo/12345`', function (done) {
-        var router = apiFilter({
+        var router = apiRouter({
           path: '/foo/:id?',
           routes: {
             patch: {
@@ -616,7 +616,7 @@ describe('ExpressJS API router config', function () {
       });
 
       it('should only apply to route DELETE `/foo/12345`', function (done) {
-        var router = apiFilter({
+        var router = apiRouter({
           path: '/foo/:id?',
           routes: {
             destroy: {
