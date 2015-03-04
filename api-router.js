@@ -11,34 +11,26 @@ module.exports = function apiRouterInit() {
       path: '/'
     }, config);
 
-    // Assign collection middleware for all methods for path
+    // Assign collection global middleware
     config.middleware.forEach(function assignMiddleware(middleware) {
       router.use(config.path, middleware);
     });
 
-    //
-    // Assign route middleware for standard method/path combinations
-    //
+    // Assign route middleware for method/path combinations
     Object.keys(config.routes).forEach(function assignRoutes(route) {
       var options = {
         path: config.path,
         method: 'get',
         middleware: [],
         status: 200,
-        action: function defaultAction(req, res, next) { next(); },
-        callback: function defaultCallback(req, res, next, doc) {
-          return res.status(options.status).send(doc);
-        }
+        message: 'OK',
+        idPath: 'resourceId'
       };
 
-      switch (route) {
+      switch (route.toLowerCase()) {
         case 'create':
-          options.callback = function createCallback(req, res, next, doc) {
-            var path = req.originalUrl.split('?')[0].replace(/\/?$/, '/');
-            return res.location(path + doc.id).status(201).send(doc);
-          };
-          /* falls through */
         case 'post':
+          options.status = 201;
           options.method = 'post';
           break;
         case 'read':
@@ -54,11 +46,8 @@ module.exports = function apiRouterInit() {
           options.method = 'patch';
           break;
         case 'destroy':
-          options.callback = function destroyCallback(req, res) {
-            return res.status(204).end();
-          };
-          /* falls through */
         case 'delete':
+          options.status = 204;
           options.method = 'delete';
           break;
         default:
@@ -67,14 +56,22 @@ module.exports = function apiRouterInit() {
 
       _.merge(options, config.routes[route]);
 
-      options.middleware.push(function finishAction(req, res, next) {
-        return options.action(req, res, function apiActionCallBack(err, doc) {
-          if (err) { return next(err); }
+      options.middleware.push(function response(req, res, next) {
+        var path;
 
-          // Trigger 404
-          if (!doc) { return next(); }
+        // Trigger 404
+        if (!res.locals.body) { return next(); }
 
-          return options.callback(req, res, next, doc);
+        if (options.status === 201 && res.locals[options.idPath] !== undefined) {
+          path = req.originalUrl.split('?')[0].replace(/\/?$/, '/');
+          res.location(path + res.locals[options.idPath]);
+        }
+
+        // Status code 204 will always send an empty object for a JSON response
+        res.status(options.status).send({
+          http_code: options.status,
+          status: 'OK',
+          body: res.locals.body
         });
       });
 
