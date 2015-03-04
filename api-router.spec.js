@@ -83,7 +83,7 @@ describe('ExpressJS API router config', function () {
           expect(res.body).toEqual(
             res.statusCode === 204 ?
             {} :
-            {http_code: route.config.statusCode, status: 'OK', body: 'Foo'}
+            {status: route.config.statusCode, message: 'OK', body: 'Foo'}
           );
 
           done();
@@ -119,7 +119,7 @@ describe('ExpressJS API router config', function () {
           expect(res.body).toEqual(
             res.statusCode === 204 ?
             {} :
-            {http_code: route.config.statusCode, status: 'OK', body: 'Bar'}
+            {status: route.config.statusCode, message: 'OK', body: 'Bar'}
           );
 
           done();

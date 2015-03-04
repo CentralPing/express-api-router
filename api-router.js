@@ -8,7 +8,13 @@ module.exports = function apiRouterInit() {
     config = _.merge({
       routes: {},
       middleware: [],
-      path: '/'
+      path: '/',
+      respObjPaths: {
+        message: 'message',
+        status: 'status',
+        body: 'body'
+      },
+      resourceIdPath: 'resourceId'
     }, config);
 
     // Assign collection global middleware
@@ -23,8 +29,7 @@ module.exports = function apiRouterInit() {
         method: 'get',
         middleware: [],
         status: 200,
-        message: 'OK',
-        idPath: 'resourceId'
+        message: 'OK'
       };
 
       switch (route.toLowerCase()) {
@@ -54,25 +59,26 @@ module.exports = function apiRouterInit() {
           break;
       }
 
-      _.merge(options, config.routes[route]);
+      _.merge(options, {respObjPaths: config.respObjPaths, resourceIdPath: config.resourceIdPath}, config.routes[route]);
 
       options.middleware.push(function response(req, res, next) {
         var path;
+        var respObj = {};
 
         // Trigger 404
         if (!res.locals.body) { return next(); }
 
-        if (options.status === 201 && res.locals[options.idPath] !== undefined) {
+        if (options.status === 201 && res.locals[options.resourceIdPath] !== undefined) {
           path = req.originalUrl.split('?')[0].replace(/\/?$/, '/');
-          res.location(path + res.locals[options.idPath]);
+          res.location(path + res.locals[options.resourceIdPath]);
         }
 
+        respObj[options.respObjPaths.status] = options.status;
+        respObj[options.respObjPaths.message] = options.message;
+        respObj[options.respObjPaths.body] = res.locals.body;
+
         // Status code 204 will always send an empty object for a JSON response
-        res.status(options.status).send({
-          http_code: options.status,
-          status: 'OK',
-          body: res.locals.body
-        });
+        res.status(options.status).send(respObj);
       });
 
       router.route(options.path)[options.method](options.middleware);
