@@ -14,6 +14,7 @@ module.exports = function apiRouterInit() {
         status: 'status',
         body: 'body'
       },
+      bodyPath: 'body',
       resourceIdPath: 'resourceId'
     }, config);
 
@@ -59,14 +60,18 @@ module.exports = function apiRouterInit() {
           break;
       }
 
-      _.merge(options, {respObjPaths: config.respObjPaths, resourceIdPath: config.resourceIdPath}, config.routes[route]);
+      _.merge(options, {
+        respObjPaths: config.respObjPaths,
+        bodyPath: config.bodyPath,
+        resourceIdPath: config.resourceIdPath,
+      }, config.routes[route]);
 
       options.middleware.push(function response(req, res, next) {
         var path;
         var respObj = {};
 
         // Trigger 404
-        if (!res.locals.body) { return next(); }
+        if (res.locals[options.bodyPath] === undefined && options.status !== 204) { return next(); }
 
         if (options.status === 201 && res.locals[options.resourceIdPath] !== undefined) {
           path = req.originalUrl.split('?')[0].replace(/\/?$/, '/');
@@ -75,9 +80,9 @@ module.exports = function apiRouterInit() {
 
         respObj[options.respObjPaths.status] = options.status;
         respObj[options.respObjPaths.message] = options.message;
-        respObj[options.respObjPaths.body] = res.locals.body;
+        respObj[options.respObjPaths.body] = res.locals[options.bodyPath];
 
-        // Status code 204 will always send an empty object for a JSON response
+        // Status code 204 will always send an empty body
         res.status(options.status).send(respObj);
       });
 
