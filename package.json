@@ -4,7 +4,7 @@
   "description": "Allows easy ExpressJS router configuration for typical and custom RESTful API endpoints.",
   "main": "api-router.js",
   "dependencies": {
-    "express": "^4.11.1",
+    "express": "^4.12.2",
     "lodash-node": "^3.0.0"
   },
   "devDependencies": {
