@@ -32,7 +32,7 @@ describe('ExpressJS API router config', function () {
       { path: '/', method: 'get', config: { type: 'read', statusCode: 200 } },
       { path: '/foo', method: 'get', config: { type: 'get', statusCode: 200 } },
       { path: '/foo', method: 'get', config: { type: 'read', statusCode: 200 } },
-      { path: '/foo', method: 'post', config: { type: 'post', statusCode: 201 } },
+      { path: '/foo', method: 'post', config: { type: 'post', statusCode: 200 } },
       { path: '/foo', method: 'post', config: { type: 'create', statusCode: 201 } },
       { path: '/foo/12345', method: 'get', config: { type: 'get', statusCode: 200 } },
       { path: '/foo/12345', method: 'get', config: { type: 'read', statusCode: 200 } },
@@ -41,7 +41,7 @@ describe('ExpressJS API router config', function () {
       { path: '/foo/12345', method: 'put', config: { type: 'update', statusCode: 200 } },
       { path: '/foo/12345', method: 'patch', config: { type: 'patch', statusCode: 200 } },
       { path: '/foo/12345', method: 'delete', config: { type: 'destroy', statusCode: 204 } },
-      { path: '/foo/12345', method: 'delete', config: { type: 'delete', statusCode: 204 } }
+      { path: '/foo/12345', method: 'delete', config: { type: 'delete', statusCode: 200 } }
     ];
 
     beforeEach(function reset() {

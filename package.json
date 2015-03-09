@@ -1,6 +1,6 @@
 {
   "name": "express-api-router",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "Allows easy ExpressJS router configuration for typical and custom RESTful API endpoints.",
   "main": "api-router.js",
   "dependencies": {

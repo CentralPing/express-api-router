@@ -35,8 +35,9 @@ module.exports = function apiRouterInit() {
 
       switch (route.toLowerCase()) {
         case 'create':
-        case 'post':
           options.status = 201;
+          /* falls through */
+        case 'post':
           options.method = 'post';
           break;
         case 'read':
@@ -52,8 +53,9 @@ module.exports = function apiRouterInit() {
           options.method = 'patch';
           break;
         case 'destroy':
-        case 'delete':
           options.status = 204;
+          /* falls through */
+        case 'delete':
           options.method = 'delete';
           break;
         default:
