@@ -71,7 +71,9 @@ module.exports = function apiRouterInit() {
         var respObj = {};
 
         // Trigger 404
-        if (res.locals[options.bodyPath] === undefined && options.status !== 204) { return next(); }
+        // - to avoid erroneous 404 while sending 204 repsonses set body to null
+        //   or anything other than undefined
+        if (res.locals[options.bodyPath] === undefined) { return next(); }
 
         if (options.status === 201 && res.locals[options.resourceIdPath] !== undefined) {
           path = req.originalUrl.split('?')[0].replace(/\/?$/, '/');
