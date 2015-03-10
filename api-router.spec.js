@@ -1,5 +1,4 @@
 var util = require('util');
-var async = require('async');
 var express = require('express');
 var request = require('supertest');
 var apiRouter = require('./api-router');
