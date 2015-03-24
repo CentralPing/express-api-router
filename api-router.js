@@ -8,6 +8,7 @@ module.exports = function apiRouterInit() {
     config = _.merge({
       routes: {},
       middleware: [],
+      params: [],
       path: '/',
       respObjPaths: {
         message: 'message',
@@ -17,6 +18,11 @@ module.exports = function apiRouterInit() {
       bodyPath: 'body',
       resourceIdPath: 'resourceId'
     }, config);
+
+    // Assign collection global middleware
+    config.params.forEach(function assignParam(param) {
+      router.param(param.name, param.callback);
+    });
 
     // Assign collection global middleware
     config.middleware.forEach(function assignMiddleware(middleware) {
