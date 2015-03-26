@@ -5,7 +5,7 @@
   "main": "api-router.js",
   "dependencies": {
     "express": "^4.12.2",
-    "lodash-node": "^3.5.0"
+    "lodash-node": "^3.6.0"
   },
   "devDependencies": {
     "gulp": "^3.8.11",
