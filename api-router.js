@@ -24,11 +24,6 @@ module.exports = function apiRouterInit() {
       router.param(param.name, param.callback);
     });
 
-    // Assign collection global middleware
-    config.middleware.forEach(function assignMiddleware(middleware) {
-      router.use(config.path, middleware);
-    });
-
     // Assign route middleware for method/path combinations
     Object.keys(config.routes).forEach(function assignRoutes(route) {
       var options = {
@@ -74,6 +69,10 @@ module.exports = function apiRouterInit() {
         resourceIdPath: config.resourceIdPath,
       }, config.routes[route]);
 
+      // Assign global middleware
+      [].unshift.apply(options.middleware, config.middleware);
+
+      // Assign route handlers
       options.middleware.push(function response(req, res, next) {
         var path;
         var respObj = {};

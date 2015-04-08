@@ -11,11 +11,11 @@
     "gulp": "^3.8.11",
     "gulp-debug": "^2.0.1",
     "gulp-if": "^1.2.5",
-    "gulp-jasmine": "^2.0.0",
-    "gulp-jshint": "^1.9.2",
+    "gulp-jasmine": "^2.0.1",
+    "gulp-jshint": "^1.10.0",
     "gulp-todo": "^2.5.0",
     "supertest": "^0.15.0",
-    "yargs": "^3.5.3"
+    "yargs": "^3.7.0"
   },
   "scripts": {
     "test": "gulp test"
